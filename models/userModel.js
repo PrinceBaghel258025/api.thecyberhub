@@ -22,6 +22,14 @@ const userSchema = mongoose.Schema({
         picture: {
             type: String,
         },
+        // changes made
+        streak: {
+            type: Number,
+            default: 0,
+        },
+        lastLogin: {
+            type: Date,
+        }
     },
     {
         timestamps: true

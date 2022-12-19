@@ -37,6 +37,8 @@ const registerUser = asyncHandler(async (req, res) => {
         email,
         password: hashedPassword,
         picture,
+        //////////
+        lastLogin: Date.now()
     })
 
     if (user) {
@@ -63,6 +65,20 @@ const loginUser = asyncHandler(async (req, res) => {
     // Check for username
     const user = await User.findOne({username})
     if (user && (await bcrypt.compare(password, user?.password))) {
+
+                
+        // changes made
+        const secs = (Date.now() - user.lastLogin) / 1000
+        let streak = user.streak;
+        if(secs > 86500 && secs < 173000 ) {
+            streak += 1;
+        } else if(secs >  173000) {
+            streak = 0;
+        }
+
+        user.streak = streak;
+        user.lastLogin = Date.now()
+        await user.save()
         res?.json({
             _id: user?.id,
             name: user?.name,
